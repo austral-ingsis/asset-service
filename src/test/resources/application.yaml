@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: asset-service
+  cloud:
+    azure:
+      storage:
+        queue:
+          enabled: false
+        fileshare:
+          enabled: false
+        blob:
+          enabled: true
+          # This uses config produced by "embedded-azurite"
+          endpoint: ${embedded.azurite.blob-endpoint}
+          account-name: ${embedded.azurite.account-name}
+          account-key: ${embedded.azurite.account-key}
