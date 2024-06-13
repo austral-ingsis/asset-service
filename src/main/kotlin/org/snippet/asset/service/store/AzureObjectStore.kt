@@ -50,6 +50,15 @@ class AzureObjectStore(private val client: BlobServiceAsyncClient) : ObjectStore
         return result
     }
 
+    override suspend fun update(container: String, key: String, data: Flux<DataBuffer>): String {
+        return if(this.delete(container, key)) {
+            logger.info("Updating data in container $container with key $key")
+            this.store(container, key, data)
+        } else {
+            "Not found"
+        }
+    }
+
     private suspend fun getClient(container: String, key: String): BlobAsyncClient {
         val containerClient = client.getBlobContainerAsyncClient(container)
         containerClient.createIfNotExists().awaitSingle()

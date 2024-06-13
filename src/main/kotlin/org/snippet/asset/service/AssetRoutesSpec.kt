@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import reactor.core.publisher.Flux
@@ -67,4 +68,18 @@ interface AssetRoutesSpec {
         ]
     )
     suspend fun deleteAsset(@PathVariable container: String, @PathVariable key: String): ResponseEntity<Unit>
+
+    @PutMapping("/{container}/{key}")
+    @Operation(
+        summary = "Update an asset",
+        parameters = [
+            Parameter(name = "container", description = "container in which to update the asset, don't include '/'", required = true, example = "snippets"),
+            Parameter(name = "key", description = "name of the asset", required = true, example = "basic-snippet.ps")
+        ],
+        responses =  [
+            ApiResponse(responseCode = "404", content = [Content()], description = "Asset was not found"),
+            ApiResponse(responseCode = "200", content = [Content()])
+        ]
+    )
+    suspend fun updateAsset(@PathVariable container: String, @PathVariable key: String, @RequestBody value: Flux<DataBuffer>): ResponseEntity<Unit>
 }
