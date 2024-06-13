@@ -9,4 +9,5 @@ interface ObjectStore {
     suspend fun store(container: String, key: String, data: Flux<DataBuffer>): String
     suspend fun get(container: String, key: String): Flow<DataBuffer>
     suspend fun delete(container: String, key: String): Boolean
+    suspend fun update(container: String, key: String, data: Flux<DataBuffer>): String
 }

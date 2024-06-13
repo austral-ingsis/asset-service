@@ -31,4 +31,12 @@ class AssetRoutes @Autowired constructor(private val store: ObjectStore): AssetR
         return if (deleted) noContent().build()
         else notFound().build()
     }
+
+    override suspend fun updateAsset(@PathVariable container: String, @PathVariable key: String, @RequestBody value: Flux<DataBuffer>): ResponseEntity<Unit> {
+        val update = store.update(container, key, value)
+        return when(update) {
+            "Not found" -> notFound().build()
+            else -> ok().build()
+        }
+    }
 }
